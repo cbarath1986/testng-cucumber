@@ -2,6 +2,7 @@ package com.legalmonkeys.test;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import com.legalmonkeys.test.annotation.Feature;
@@ -13,7 +14,8 @@ import cucumber.runtime.io.MultiLoader;
 
 public class AbstractCucumberTest {
 
-    protected static final String STEPS_PACKAGE = "com.legalmonkeys.mc.ui.steps";
+    public static final String CUCUMBER_STEPS_PACKAGE_PROPERTY = "cucumber.steps.package";
+    protected static final String STEPS_PACKAGE = ResourceBundle.getBundle("cucumber").getString(CUCUMBER_STEPS_PACKAGE_PROPERTY);
     protected static final String RESOURCES =
             "src" + File.separator + "test" + File.separator + "resources" + File.separator;
     private ClassLoader classLoader = getClass().getClassLoader();
