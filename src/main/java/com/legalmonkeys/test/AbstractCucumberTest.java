@@ -50,6 +50,8 @@ public class AbstractCucumberTest {
         runtime.run();
 
         // verify
-
+        if (runtime.getErrors().size() > 0) {
+            throw new RuntimeException(runtime.getErrors().get(0));
+        }
     }
 }
