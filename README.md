@@ -11,3 +11,21 @@ You need to put configuration file in your project like:
 # java package with steps classes in your project
 cucumber.steps.package=com.yourpackage
 </code></pre>
+
+To check you didn't forget to implement TestNG @Test add such additional test:
+
+<pre><code>
+public class StateTest {
+
+    @Test(priority = -1)
+    public void testState() {
+        // setup
+
+        // act
+        String result = CucumberTestsStateUtil.checkTests();
+
+        // verify
+        Assert.assertNull(result, result);
+    }
+}
+</code></pre>

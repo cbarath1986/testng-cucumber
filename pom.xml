@@ -4,7 +4,7 @@
     <artifactId>cucumber-testng</artifactId>
     <groupId>com.legalmonkeys.test</groupId>
     <name>cucumber-testng</name>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -29,6 +29,11 @@
             <artifactId>testng</artifactId>
             <version>6.8</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
         </dependency>
     </dependencies>
     <build>
