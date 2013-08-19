@@ -39,7 +39,7 @@ public class AbstractCucumberTest {
         }
         runtimeOptions.formatters.clear();
         runtimeOptions.formatters.add(new CucumberTestNgFormatter(System.out));
-        runtimeOptions.filters.add(Pattern.compile(scenarioName));
+        runtimeOptions.filters.add(Pattern.compile(scenarioName + "$"));
         getClass().getPackage().getName();
         runtimeOptions.featurePaths
                 .add(RESOURCES + featureClass.getPackage().getName().replace(".", File.separator) + File.separator
