@@ -22,30 +22,8 @@ public class CucumberTestsStateUtil {
     protected static final String RESOURCES =
             "src" + File.separator + "test" + File.separator + "resources" + File.separator;
     protected static final String TEST_DIR = "src" + File.separator + "test" + File.separator + "java" + File.separator;
-    private static ClassLoader classLoader = CucumberTestsStateUtil.class.getClassLoader();
-
-    public static class Scenario {
-        private String scenarioName;
-        private boolean foundInTestNG;
-
-        Scenario(String scenarioName) {
-            this.scenarioName = scenarioName;
-        }
-
-        boolean isFoundInTestNG() {
-            return foundInTestNG;
-        }
-
-        void setFoundInTestNG(boolean foundInTestNG) {
-            this.foundInTestNG = foundInTestNG;
-        }
-
-        public String getScenarioName() {
-            return scenarioName;
-        }
-    }
-
     static Map<String, List<Scenario>> scenarioMap = new HashMap<>();
+    private static ClassLoader classLoader = CucumberTestsStateUtil.class.getClassLoader();
 
     /**
      * Checks if there is no TestNG tests for Cucumber Scenarios
@@ -56,9 +34,13 @@ public class CucumberTestsStateUtil {
         try {
             File featuresDir = new File(RESOURCES);
             Collection<File> featuresFiles = FileUtils.listFiles(featuresDir, new String[]{ "feature" }, true);
-            String featureDir = featuresFiles.iterator().next().getParent();
             ArrayList<String> featurePaths = new ArrayList<>();
-            featurePaths.add(featureDir);
+            for (File featuresFile : featuresFiles) {
+                String featureDir = featuresFile.getParent();
+                if (!featurePaths.contains(featureDir)) {
+                    featurePaths.add(featureDir);
+                }
+            }
             List<CucumberFeature> features = CucumberFeature
                     .load(new FileResourceLoader(), featurePaths, new ArrayList<>());
             for (CucumberFeature cucumberFeature : features) {
@@ -127,5 +109,26 @@ public class CucumberTestsStateUtil {
             return "Error checking tests state." + e.getLocalizedMessage();
         }
         return null;
+    }
+
+    public static class Scenario {
+        private String scenarioName;
+        private boolean foundInTestNG;
+
+        Scenario(String scenarioName) {
+            this.scenarioName = scenarioName;
+        }
+
+        boolean isFoundInTestNG() {
+            return foundInTestNG;
+        }
+
+        void setFoundInTestNG(boolean foundInTestNG) {
+            this.foundInTestNG = foundInTestNG;
+        }
+
+        public String getScenarioName() {
+            return scenarioName;
+        }
     }
 }
