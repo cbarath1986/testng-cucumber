@@ -21,22 +21,41 @@ public class AbstractCucumberTest {
     private ClassLoader classLoader = getClass().getClassLoader();
     private MultiLoader multiLoader = new MultiLoader(classLoader);
 
+    private static final int RETRY = Integer.parseInt(System.getProperty("retry.tests", "0"));
+
     public void run() {
+        run(0);
+    }
+
+    public void run(int retry) {
         // setup
         RuntimeOptions runtimeOptions = new RuntimeOptions(new Properties());
         runtimeOptions.glue.add(STEPS_PACKAGE);
-        StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[2];
-        String scenarioName;
-        String featureName;
-        Class<?> featureClass;
-        try {
-            featureClass = classLoader.loadClass(stackTraceElement.getClassName());
-            featureName = featureClass.getAnnotation(Feature.class).value();
-            scenarioName = featureClass.getMethod(stackTraceElement.getMethodName()).getAnnotation(Scenario.class)
-                    .value();
-        } catch (NoSuchMethodException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        String scenarioName = null;
+        String featureName = null;
+        Class<?> featureClass = null;
+        System.out.println("stacktrace:");
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            System.out.println(stackTraceElement.toString());
+            try {
+                featureClass = classLoader.loadClass(stackTraceElement.getClassName());
+                Feature annotation = featureClass.getAnnotation(Feature.class);
+                if (annotation != null) {
+                    featureName = annotation.value();
+                    scenarioName = featureClass.getMethod(stackTraceElement.getMethodName()).getAnnotation(Scenario.class)
+                            .value();
+                    break;
+                }
+            } catch (NoSuchMethodException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
+        if (featureClass == null || scenarioName == null || featureName == null) {
+            throw new RuntimeException("cannot find test implementation");
+        }
+        System.out.println("Try(" + retry + ") Running test featureName=" + featureName + "; scenario=" +
+                scenarioName);
         runtimeOptions.formatters.clear();
         runtimeOptions.formatters.add(new CucumberTestNgFormatter(System.out));
         runtimeOptions.filters.add(Pattern.compile(scenarioName + "$"));
@@ -51,7 +70,11 @@ public class AbstractCucumberTest {
 
         // verify
         if (runtime.getErrors().size() > 0) {
-            throw new RuntimeException(runtime.getErrors().get(0));
+            if (retry < RETRY) {
+                run(retry + 1);
+            } else {
+                throw new RuntimeException(runtime.getErrors().get(0));
+            }
         }
     }
 }
