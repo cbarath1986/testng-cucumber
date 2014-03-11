@@ -29,3 +29,15 @@ public class StateTest {
     }
 }
 </code></pre>
+
+#Changelog:
+<p>
+<b>0.1.0<b>
+</p>
+<ul>
+<li>
+[+] Feature. Retry run failed test support added.
+Need to be added java property at runtime -Dretry.tests=3 to rerun this test max 3 times more if it failed
+at first run. 0 by default.
+</li>
+</ul>
