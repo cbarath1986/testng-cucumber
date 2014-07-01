@@ -1,11 +1,22 @@
 apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'maven-publish'
+//apply plugin: 'maven-publish'
+apply plugin: 'release'
 
-group = 'com.legalmonkeys.test'
-description = 'cucumber-testng'
-version = '0.0.1-SNAPSHOT'
+//group = 'com.legalmonkeys.test'
+//description = 'cucumber-testng'
+//version = '0.0.1-SNAPSHOT'
+//
+buildscript {
+  repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/groups/public" }
+  }
+  dependencies {
+    classpath 'com.github.townsfolk:gradle-release:1.2'
+  }
+}
 
 repositories {
   mavenLocal()
@@ -45,16 +56,16 @@ task sourceJar(type: Jar) {
   from sourceSets.main.allJava
 }
 
-publishing {
-  publications {
-    maven(MavenPublication) {
-      groupId 'com.legalmonkeys.test'
-      artifactId 'cucumber-testng'
-      version "$version"
-      from components.java
-    }
-  }
-}
+//publishing {
+//  publications {
+//    maven(MavenPublication) {
+//      groupId 'com.legalmonkeys.test'
+//      artifactId 'cucumber-testng'
+//      version "$version"
+//      from components.java
+//    }
+//  }
+//}
 
 dependencies {
   compile "info.cukes:cucumber-jvm-deps:1.0.3"
