@@ -1,0 +1,65 @@
+apply plugin: 'maven'
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven-publish'
+
+group = 'com.legalmonkeys.test'
+description = 'cucumber-testng'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+  mavenLocal()
+  maven {
+    url "http://build.legalmonkeys.com/nexus/content/groups/public"
+  }
+  mavenCentral()
+}
+
+configurations {
+  provided
+  // do not activate this line (breakes moduledependencies in Intellij IDEA)
+  // provided.extendsFrom(compile)
+}
+
+idea {
+  module {
+    scopes.PROVIDED.plus += configurations.provided
+  }
+  project {
+    jdkName = '1.7'
+    languageLevel = '1.7'
+  }
+}
+
+sourceSets {
+  main {
+    compileClasspath += configurations.provided
+  }
+  test {
+    compileClasspath += configurations.provided
+    runtimeClasspath += configurations.provided
+  }
+}
+
+task sourceJar(type: Jar) {
+  from sourceSets.main.allJava
+}
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      groupId 'com.legalmonkeys.test'
+      artifactId 'cucumber-testng'
+      version "$version"
+      from components.java
+    }
+  }
+}
+
+dependencies {
+  compile "info.cukes:cucumber-jvm-deps:1.0.3"
+  compile "info.cukes:cucumber-picocontainer:1.1.1"
+  testCompile "info.cukes:cucumber-java:1.1.1"
+  provided "org.testng:testng:6.8"
+  compile "commons-io:commons-io:2.4"
+}
