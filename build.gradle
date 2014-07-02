@@ -10,7 +10,7 @@ buildscript {
     maven { url "http://build.legalmonkeys.com/nexus/content/groups/public" }
   }
   dependencies {
-    classpath 'com.github.townsfolk:gradle-release:1.2.1'
+    classpath 'com.github.townsfolk:gradle-release:1.2.2'
   }
 }
 
