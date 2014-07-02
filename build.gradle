@@ -8,13 +8,15 @@ apply plugin: 'release'
 //description = 'cucumber-testng'
 //version = '0.0.1-SNAPSHOT'
 //
+//apply from: 'http://tellurianring.com/projects/gradle-plugins/gradle-release/1.2-SNAPSHOT/apply.groovy'
 buildscript {
   repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/groups/public" }
+    maven { url "http://build.legalmonkeys.com/nexus/content/groups/public" }
   }
   dependencies {
-    classpath 'com.github.townsfolk:gradle-release:1.2'
+    classpath 'om.github.townsfolk:gradle-release:1.2.1'
   }
 }
 
