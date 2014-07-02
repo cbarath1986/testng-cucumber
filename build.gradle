@@ -1,14 +1,8 @@
 apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'idea'
-//apply plugin: 'maven-publish'
 apply plugin: 'release'
 
-//group = 'com.legalmonkeys.test'
-//description = 'cucumber-testng'
-//version = '0.0.1-SNAPSHOT'
-//
-//apply from: 'http://tellurianring.com/projects/gradle-plugins/gradle-release/1.2-SNAPSHOT/apply.groovy'
 buildscript {
   repositories {
     mavenCentral()
@@ -16,7 +10,7 @@ buildscript {
     maven { url "http://build.legalmonkeys.com/nexus/content/groups/public" }
   }
   dependencies {
-    classpath 'om.github.townsfolk:gradle-release:1.2.1'
+    classpath 'com.github.townsfolk:gradle-release:1.2.1'
   }
 }
 
@@ -56,21 +50,6 @@ sourceSets {
 
 task sourceJar(type: Jar) {
   from sourceSets.main.allJava
-}
-
-//publishing {
-//  publications {
-//    maven(MavenPublication) {
-//      groupId 'com.legalmonkeys.test'
-//      artifactId 'cucumber-testng'
-//      version "$version"
-//      from components.java
-//    }
-//  }
-//}
-
-release {
-  requireBranch = 'test1'
 }
 
 dependencies {
