@@ -53,7 +53,7 @@ public class LoginTest extends AbstractCucumberTest {
 <pre><code>
 Feature: Login
 
-  Scenario: Login Successful
+  Scenario: Login with guest account
     Given Prepared user with username <"SuccessfulUsername"> and password <"12345">
     Then Open login page
     Then Fill login form with user <"SuccessfulUsername"> and password <"12345"> and click login
