@@ -30,6 +30,37 @@ public class StateTest {
 }
 </code></pre>
 
+Then for each feature scenario you need to create TestNG test.
+Feature Name shoud be same as feature file name
+Scenario name should be same as feature scenario name in cucumber
+
+> src/test/java/com/example/LoginTest.java
+
+<pre><code>
+
+@Feature("login")
+public class LoginTest extends AbstractCucumberTest {
+
+    @Test
+    @Scenario("Login with guest account")
+    public void loginWithGuestAccount() {
+        run();
+    }
+</code></pre>
+
+> resources/com/example/test/login.feature
+
+<pre><code>
+Feature: Login
+
+  Scenario: Login Successful
+    Given Prepared user with username <"SuccessfulUsername"> and password <"12345">
+    Then Open login page
+    Then Fill login form with user <"SuccessfulUsername"> and password <"12345"> and click login
+    Then Check we logged in with username <"SuccessfulUsername">
+
+</code></pre>
+
 #Changelog:
 <p>
 <b>0.1.0<b>
