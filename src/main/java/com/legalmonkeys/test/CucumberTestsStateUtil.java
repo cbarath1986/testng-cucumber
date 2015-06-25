@@ -1,21 +1,15 @@
 package com.legalmonkeys.test;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-
 import com.legalmonkeys.test.annotation.Feature;
-
 import cucumber.runtime.io.FileResourceLoader;
 import cucumber.runtime.model.CucumberFeature;
 import cucumber.runtime.model.CucumberTagStatement;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class CucumberTestsStateUtil {
 
@@ -33,7 +27,7 @@ public class CucumberTestsStateUtil {
     public static String checkTests() {
         try {
             File featuresDir = new File(RESOURCES);
-            Collection<File> featuresFiles = FileUtils.listFiles(featuresDir, new String[]{ "feature" }, true);
+            Collection<File> featuresFiles = FileUtils.listFiles(featuresDir, new String[]{"feature"}, true);
             ArrayList<String> featurePaths = new ArrayList<>();
             for (File featuresFile : featuresFiles) {
                 String featureDir = featuresFile.getParent();
@@ -55,8 +49,8 @@ public class CucumberTestsStateUtil {
                     scenarioMap.get(featureName).add(new Scenario(scenarioName));
                 }
             }
-
-            Collection<File> testngTests = FileUtils.listFiles(new File(TEST_DIR), new String[]{ "java" }, true);
+            String uniqueCheck = checkTestNamesUnique(scenarioMap);
+            Collection<File> testngTests = FileUtils.listFiles(new File(TEST_DIR), new String[]{"java"}, true);
             for (File testngTest : testngTests) {
                 String classPath = testngTest.getCanonicalPath();
                 classPath = classPath.substring(classPath.indexOf("java") + 5).replace(File.separator, ".");
@@ -85,6 +79,10 @@ public class CucumberTestsStateUtil {
             boolean fail = false;
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("\n");
+            if (uniqueCheck != null) {
+                fail = true;
+                stringBuilder.append(uniqueCheck);
+            }
             for (String featureName : scenarioMap.keySet()) {
                 for (Scenario scenario : scenarioMap.get(featureName)) {
                     testCount++;
@@ -107,6 +105,26 @@ public class CucumberTestsStateUtil {
         } catch (IOException e) {
             e.printStackTrace();
             return "Error checking tests state." + e.getLocalizedMessage();
+        }
+        return null;
+    }
+
+    private static String checkTestNamesUnique(Map<String, List<Scenario>> scenarioMap) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String feature : scenarioMap.keySet()) {
+            List<Scenario> scenarios = scenarioMap.get(feature);
+            for (Scenario scenario : scenarios) {
+                for (Scenario scenario1 : scenarios) {
+                    if (!scenario1.equals(scenario) && scenario1.getScenarioName().startsWith(scenario.getScenarioName())) {
+                        stringBuilder.append("Feature '").append(feature).append("' scenario '").append(scenario.getScenarioName()).append("' name crosses with scenario '").append(scenario1.getScenarioName()).append("'");
+                        stringBuilder.append("\n");
+                    }
+                }
+            }
+        }
+        String result = stringBuilder.toString();
+        if (result.length() > 0) {
+            return result;
         }
         return null;
     }

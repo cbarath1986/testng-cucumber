@@ -63,6 +63,15 @@ Feature: Login
 
 #Changelog:
 <p>
+<b>0.1.1<b>
+</p>
+<ul>
+<li>
+[+] CucumberTestsStateUtil. Added check tests names are unique because cucumber starts tests using regexp 
+instead check name for equal (so one test name shouldn't start with another test name)
+</li>
+</ul>
+<p>
 <b>0.1.0<b>
 </p>
 <ul>

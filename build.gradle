@@ -7,7 +7,6 @@ buildscript {
   repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/groups/public" }
-    maven { url "http://build.legalmonkeys.com/nexus/content/groups/public" }
   }
   dependencies {
     classpath 'com.github.townsfolk:gradle-release:1.2.2'
