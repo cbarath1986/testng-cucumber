@@ -1,16 +1,15 @@
 package com.legalmonkeys.test;
 
+import com.legalmonkeys.test.annotation.Feature;
+import com.legalmonkeys.test.annotation.Scenario;
+import cucumber.runtime.Runtime;
+import cucumber.runtime.RuntimeOptions;
+import cucumber.runtime.io.MultiLoader;
+
 import java.io.File;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
-
-import com.legalmonkeys.test.annotation.Feature;
-import com.legalmonkeys.test.annotation.Scenario;
-
-import cucumber.runtime.Runtime;
-import cucumber.runtime.RuntimeOptions;
-import cucumber.runtime.io.MultiLoader;
 
 public class AbstractCucumberTest {
 
@@ -31,6 +30,7 @@ public class AbstractCucumberTest {
         // setup
         RuntimeOptions runtimeOptions = new RuntimeOptions(new Properties());
         runtimeOptions.glue.add(STEPS_PACKAGE);
+        runtimeOptions.strict = true;
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         String scenarioName = null;
         String featureName = null;
