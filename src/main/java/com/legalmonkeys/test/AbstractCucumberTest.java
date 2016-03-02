@@ -69,11 +69,16 @@ public class AbstractCucumberTest {
         runtime.run();
 
         // verify
-        if (runtime.getErrors().size() > 0) {
+        if (runtime.exitStatus() != 0) {
+            if (runtime.getErrors().size() == 0 && runtime.getSnippets().size() > 0) {
+                throw new RuntimeException(runtime.getSnippets().get(0));
+            }
             if (retry < RETRY) {
                 run(retry + 1);
             } else {
-                throw new RuntimeException(runtime.getErrors().get(0));
+                if (runtime.getErrors().size() > 0) {
+                    throw new RuntimeException(runtime.getErrors().get(0));
+                }
             }
         }
     }
